@@ -1,0 +1,35 @@
+{
+	"name": "1.orbit-user-portal",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^8.0.0",
+		"@sveltejs/kit": "^3.0.0",
+		"@sveltejs/vite-plugin-svelte": "^7.2.0",
+		"autoprefixer": "^10.6.1",
+		"postcss": "^8.5.29",
+		"svelte": "^5.57.1",
+		"tailwindcss": "^3.4.19",
+		"vite": "^8.3.0"
+	},
+	"imports": {
+		"#lib": "./src/lib/index.js",
+		"#lib/*": "./src/lib/*"
+	},
+	"dependencies": {
+		"@lucide/svelte": "^1.55.0",
+		"bits-ui": "^2.19.5",
+		"clsx": "^2.1.1",
+		"mode-watcher": "^1.1.0",
+		"svelte-sonner": "^1.2.1",
+		"tailwind-merge": "^3.7.0",
+		"tailwind-variants": "^3.3.1"
+	}
+}
