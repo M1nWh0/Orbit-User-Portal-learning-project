@@ -9,7 +9,7 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 | Phase | Description | Total Tasks | Completed | Status |
 |---|---|:---:|:---:|:---:|
 | **Phase 1** | Project Initialization & Tooling Setup | 7 | 7 | ✅ Completed |
-| **Phase 2** | Server-Only Data Store & Security Primitives | 6 | 0 | ⏳ Pending Approval |
+| **Phase 2** | Server-Only Data Store & Security Primitives | 6 | 6 | ✅ Completed |
 | **Phase 3** | Authentication, Session Management & Server Hooks | 5 | 0 | ⏳ Pending Approval |
 | **Phase 4** | Shared Application Shell, Layout & Theme System | 5 | 0 | ⏳ Pending Approval |
 | **Phase 5** | Public Routes & Authentication Pages | 5 | 0 | ⏳ Pending Approval |
@@ -17,7 +17,7 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 | **Phase 7** | Administrative Console & User Management | 5 | 0 | ⏳ Pending Approval |
 | **Phase 8** | Controlled Debugging Laboratory (`/debug-lab`) | 5 | 0 | ⏳ Pending Approval |
 | **Phase 9** | End-to-End Verification, Security Auditing & Polish | 6 | 0 | ⏳ Pending Approval |
-| **Total** | | **49** | **7** | **14% Completed** |
+| **Total** | | **49** | **13** | **27% Completed** |
 
 ---
 
@@ -53,25 +53,25 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
   - [x] `hashPassword(password, salt)` using `crypto.scrypt` or `crypto.pbkdf2Sync`
   - [x] `verifyPassword(password, hash, salt)` with `crypto.timingSafeEqual`
   - [x] `generateSessionId()` with `crypto.randomUUID()`
-- [ ] **2.2** Implement in-memory store (`src/lib/server/store.js`):
-  - [ ] User record structure (`id`, `name`, `email`, `passwordHash`, `passwordSalt`, `role`, `status`, `bio`, `createdAt`)
-  - [ ] Seed accounts with hashed passwords:
-    - [ ] `member@example.com` / `member123` (`user`, `active`)
-    - [ ] `admin@example.com` / `admin123` (`admin`, `active`)
-- [ ] **2.3** Implement User CRUD methods:
-  - [ ] `getUsers()`
-  - [ ] `getUserById(id)`
-  - [ ] `getUserByEmail(email)` (with normalized email)
-  - [ ] `createUser(input)`
-  - [ ] `updateUserProfile(id, input)`
-  - [ ] `updateUserRole(id, role)`
-  - [ ] `setUserStatus(id, status)`
-  - [ ] `verifyCredentials(email, password)`
-- [ ] **2.4** Implement invariant checks:
-  - [ ] Final active administrator protection (cannot demote or deactivate if active admins <= 1)
-  - [ ] Email uniqueness enforcement
-- [ ] **2.5** Implement safe projection helpers (`toSafeUser`, `toPublicDirectoryUser`)
-- [ ] **2.6** Unit test store functions and invariant guards in isolation
+- [x] **2.2** Implement in-memory store (`src/lib/server/store.js`):
+  - [x] User record structure (`id`, `name`, `email`, `passwordHash`, `passwordSalt`, `role`, `status`, `bio`, `createdAt`)
+  - [x] Seed accounts with hashed passwords:
+    - [x] `member@example.com` / `member123` (`user`, `active`)
+    - [x] `admin@example.com` / `admin123` (`admin`, `active`)
+- [x] **2.3** Implement User CRUD methods:
+  - [x] `getUsers()`
+  - [x] `getUserById(id)`
+  - [x] `getUserByEmail(email)` (with normalized email)
+  - [x] `createUser(input)`
+  - [x] `updateUserProfile(id, input)`
+  - [x] `updateUserRole(id, role)`
+  - [x] `setUserStatus(id, status)`
+  - [x] `verifyCredentials(email, password)`
+- [x] **2.4** Implement invariant checks:
+  - [x] Final active administrator protection (cannot demote or deactivate if active admins <= 1)
+  - [x] Email uniqueness enforcement
+- [x] **2.5** Implement safe projection helpers (`toSafeUser`, `toPublicDirectoryUser`)
+- [x] **2.6** Unit test store functions and invariant guards in isolation
 
 ---
 

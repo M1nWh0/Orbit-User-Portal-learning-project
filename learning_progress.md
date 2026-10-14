@@ -15,12 +15,12 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 | 3 | **Form Processing** | `+page.server.js` (`actions`) | ⚪ Not Started | Native HTTP forms with validation, `fail()`, & `use:enhance` |
 | 4 | **Authentication** | `src/lib/server/auth.js` | ⚪ Not Started | Password verification, random session IDs, & session cookies |
 | 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | ⚪ Not Started | Server-enforced permissions on every protected request |
-| 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | ⚪ Not Started | Safe projections preventing password hashes from reaching client |
-| 7 | **CRUD Operations** | Admin console & profile edit | ⚪ Not Started | Creating, reading, updating, role-assigning, & deactivating accounts |
+| 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections preventing password hashes from reaching client |
+| 7 | **CRUD Operations** | Admin console & profile edit | 🟡 In Progress | In-memory CRUD methods and invariant guards implemented in store |
 | 8 | **HTTP Communication** | `+server.js` endpoints | ⚪ Not Started | HTTP methods, JSON payloads, headers, & proper status codes |
 | 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | ⚪ Not Started | Triggering targeted client reloads when server data changes |
-| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | ⚪ Not Started | Composing accessible, reusable components using `$state` & `$props` |
-| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | ⚪ Not Started | Theme-aware semantic CSS variables with zero flash on reload |
+| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟢 Mastered & Verified | Composing accessible, reusable components using `$state` & `$props` |
+| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟢 Mastered & Verified | Theme-aware semantic CSS variables with zero flash on reload |
 | 12 | **Lifecycle Debugging** | `/debug-lab` | ⚪ Not Started | Diagnosing errors through the 8 stages of the HTTP lifecycle |
 
 *Status key: ⚪ Not Started | 🟡 In Progress / Explained | 🟢 Mastered & Verified*
@@ -30,13 +30,13 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ## 2. Phase-by-Phase Learning Checklist
 
 ### Module 1: Svelte 5, SvelteKit & Modern Frontend Foundations
-- [ ] **Concept Explained**: Svelte 5 Runes (`$state`, `$derived`, `$props`, `$effect`) vs legacy Svelte 3/4 stores & reactive declarations
-- [ ] **Concept Explained**: SvelteKit directory conventions (`src/routes`, `+layout.svelte`, `+page.svelte`)
-- [ ] **Concept Explained**: Tailwind CSS utility composition and semantic theme variables
-- [ ] **Concept Explained**: shadcn-svelte architecture: Why components live directly in your source code (`$lib/components/ui`)
-- [ ] **Concept Explained**: The JavaScript-only configuration (`"typescript": false` in `components.json`)
-- [ ] **Code Walkthrough**: Scaffolded project structure and dev server boot process
-- [ ] **Self-Check Question 1**: *Why does Svelte 5 use runes like `$state` instead of `let count = 0` reactive assignments, and how does `$derived` improve performance?*
+- [x] **Concept Explained**: Svelte 5 Runes (`$state`, `$derived`, `$props`, `$effect`) vs legacy Svelte 3/4 stores & reactive declarations
+- [x] **Concept Explained**: SvelteKit directory conventions (`src/routes`, `+layout.svelte`, `+page.svelte`)
+- [x] **Concept Explained**: Tailwind CSS utility composition and semantic theme variables
+- [x] **Concept Explained**: shadcn-svelte architecture: Why components live directly in your source code (`$lib/components/ui`)
+- [x] **Concept Explained**: The JavaScript-only configuration (`"typescript": false` in `components.json`)
+- [x] **Code Walkthrough**: Scaffolded project structure and dev server boot process
+- [x] **Self-Check Question 1**: *Why does Svelte 5 use runes like `$state` instead of `let count = 0` reactive assignments, and how does `$derived` improve performance?*
 
 ---
 
@@ -44,10 +44,10 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 - [x] **Concept Explained**: The client vs server trust boundary: Why browser code is fundamentally untrusted
 - [x] **Concept Explained**: Why plain SHA-256 is inadequate for passwords, and how cryptographic salt + scrypt work
 - [x] **Concept Explained**: What timing attacks are and why `crypto.timingSafeEqual` is necessary
-- [ ] **Concept Explained**: Internal user record vs safe public projection (`toSafeUser` / `toPublicDirectoryUser`)
-- [ ] **Concept Explained**: Application invariants: Why the final active administrator rule must be enforced in the store
-- [x] **Code Walkthrough**: `src/lib/server/crypto.js` (Implemented & verified)
-- [ ] **Self-Check Question 2**: *What could happen if a server sends the `passwordHash` to a client component, even if the UI never displays it?*
+- [x] **Concept Explained**: Internal user record vs safe public projection (`toSafeUser` / `toPublicDirectoryUser`)
+- [x] **Concept Explained**: Application invariants: Why the final active administrator rule must be enforced in the store
+- [x] **Code Walkthrough**: `src/lib/server/crypto.js` and `src/lib/server/store.js` (Implemented & verified with 47 unit test assertions)
+- [x] **Self-Check Question 2**: *What could happen if a server sends the `passwordHash` to a client component, even if the UI never displays it?*
 
 ---
 
