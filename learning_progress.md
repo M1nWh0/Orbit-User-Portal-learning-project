@@ -10,17 +10,17 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 
 | # | Competency Area | Primary File / Feature | Mastery Status | Key Takeaway Understood |
 |---|---|---|:---:|---|
-| 1 | **Application Architecture** | `hooks.server.js`, `$lib/server/` | ⚪ Not Started | Clear separation of UI, routing, auth, authorization, & store |
+| 1 | **Application Architecture** | `hooks.server.js`, `$lib/server/` | 🟢 Mastered & Verified | Clear separation of server boundary, session resolution, route guards, & store invariants |
 | 2 | **Server-Driven Rendering** | `+page.server.js` (`load`) | ⚪ Not Started | Data fetched securely on server before HTML reaches client |
 | 3 | **Form Processing** | `+page.server.js` (`actions`) | ⚪ Not Started | Native HTTP forms with validation, `fail()`, & `use:enhance` |
-| 4 | **Authentication** | `src/lib/server/auth.js` | ⚪ Not Started | Password verification, random session IDs, & session cookies |
-| 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | ⚪ Not Started | Server-enforced permissions on every protected request |
-| 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections preventing password hashes from reaching client |
+| 4 | **Authentication** | `src/lib/server/auth.js` | 🟢 Mastered & Verified | HttpOnly, SameSite=Lax cookie sessions with instant revocation on deactivation |
+| 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | 🟢 Mastered & Verified | Server-enforced route protection in handle() hook and requireUser/requireAdmin helpers |
+| 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections (toSafeUser) preventing password hashes and salts from reaching client |
 | 7 | **CRUD Operations** | Admin console & profile edit | 🟡 In Progress | In-memory CRUD methods and invariant guards implemented in store |
 | 8 | **HTTP Communication** | `+server.js` endpoints | ⚪ Not Started | HTTP methods, JSON payloads, headers, & proper status codes |
 | 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | ⚪ Not Started | Triggering targeted client reloads when server data changes |
-| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟢 Mastered & Verified | Composing accessible, reusable components using `$state` & `$props` |
-| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟢 Mastered & Verified | Theme-aware semantic CSS variables with zero flash on reload |
+| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟡 In Progress | Components scaffolded; composing accessible shells in Phase 4 |
+| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟡 In Progress | Design tokens and CSS variables configured; theme-toggle in Phase 4 |
 | 12 | **Lifecycle Debugging** | `/debug-lab` | ⚪ Not Started | Diagnosing errors through the 8 stages of the HTTP lifecycle |
 
 *Status key: ⚪ Not Started | 🟡 In Progress / Explained | 🟢 Mastered & Verified*
@@ -52,12 +52,12 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ---
 
 ### Module 3: Authentication, Session Management & Server Hooks
-- [ ] **Concept Explained**: Session-based auth vs JWT tokens: Why sessions allow instant revocation upon deactivation
-- [ ] **Concept Explained**: Cookie security flags: `HttpOnly` (XSS protection), `SameSite=Lax` (CSRF mitigation), `Path`, `Secure`
-- [ ] **Concept Explained**: How `hooks.server.js` intercepts every incoming HTTP request and populates `event.locals.user`
-- [ ] **Concept Explained**: Reusable server authorization helpers (`requireUser`, `requireAdmin`)
-- [ ] **Code Walkthrough**: `src/lib/server/auth.js` and `src/hooks.server.js`
-- [ ] **Self-Check Question 3**: *If an attacker steals a user's browser localStorage, can they steal an `HttpOnly` session cookie? Why or why not?*
+- [x] **Concept Explained**: Session-based auth vs JWT tokens: Why sessions allow instant revocation upon deactivation
+- [x] **Concept Explained**: Cookie security flags: `HttpOnly` (XSS protection), `SameSite=Lax` (CSRF mitigation), `Path`, `Secure`
+- [x] **Concept Explained**: How `hooks.server.js` intercepts every incoming HTTP request and populates `event.locals.user`
+- [x] **Concept Explained**: Reusable server authorization helpers (`requireUser`, `requireAdmin`)
+- [x] **Code Walkthrough**: `src/lib/server/auth.js` and `src/hooks.server.js`
+- [x] **Self-Check Question 3**: *If an attacker steals a user's browser localStorage, can they steal an `HttpOnly` session cookie? Why or why not?*
 
 ---
 
@@ -123,3 +123,13 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Password Hashing*: Fast hash algorithms (MD5, SHA-256) are disastrous for passwords because GPUs can test billions of hashes/sec. Key Derivation Functions like `scrypt` require substantial memory and computation time, making brute-force attacks infeasible.
   - *Salts*: Every password gets a unique random 16-byte salt to prevent rainbow table attacks and ensure identical passwords produce completely distinct hashes.
   - *Timing Attacks*: Standard string comparison (`===`) short-circuits on the first mismatched byte, leaking information about how many characters were correct via microsecond timing differences. `crypto.timingSafeEqual` runs in constant time.
+- **Step 2.2 (Data Store & Invariants - `src/lib/server/store.js`)**:
+  - *Defense-in-Depth Projections*: Even if a developer accidentally returns a user object to a page, `toSafeUser()` ensures `passwordHash` and `passwordSalt` are stripped before leaving the store layer.
+  - *Email Normalization*: Case-folding (`trim().toLowerCase()`) is non-negotiable to prevent duplicate accounts and security bypasses.
+  - *Business Invariants*: The "last active administrator" guard is enforced directly in `updateUserRole` and `setUserStatus` so that no API or UI action can ever brick the administrative access to the system.
+  - *Instant Revocation*: Account deactivation immediately calls `deleteSessionsForUser(id)`, cutting off compromised or deactivated accounts on their very next HTTP request.
+- **Step 3.1 & 3.2 (Authentication, Sessions & Server Hooks - `auth.js`, `hooks.server.js`, `+layout.server.js`)**:
+  - *Session-Based vs JWT*: Stateful server sessions allow immediate logout and revocation upon deactivation; stateless JWTs cannot be revoked until they expire without complex distributed blacklists.
+  - *Cookie Security Flags*: `HttpOnly` makes cookies completely inaccessible to JavaScript (`document.cookie`), neutralizing token theft via XSS. `SameSite=Lax` prevents CSRF attacks on cross-site requests.
+  - *Request Lifecycle Interception*: SvelteKit's `handle` hook runs before any route resolves. It resolves the session, attaches `event.locals.user`, enforces RBAC route protection, and redirects unauthorized traffic before rendering starts.
+  - *Root Data Cascading*: `+layout.server.js` exposes `{ user: locals.user }` to all child layouts and pages, creating a single reactive source of truth for the active session.
