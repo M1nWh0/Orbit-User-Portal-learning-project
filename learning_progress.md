@@ -19,8 +19,8 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 | 7 | **CRUD Operations** | Admin console & profile edit | 🟡 In Progress | In-memory CRUD methods and invariant guards implemented in store |
 | 8 | **HTTP Communication** | `+server.js` endpoints | ⚪ Not Started | HTTP methods, JSON payloads, headers, & proper status codes |
 | 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | ⚪ Not Started | Triggering targeted client reloads when server data changes |
-| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟡 In Progress | Components scaffolded; composing accessible shells in Phase 4 |
-| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟡 In Progress | Design tokens and CSS variables configured; theme-toggle in Phase 4 |
+| 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟢 Mastered & Verified | Composed accessible shell with responsive desktop sidebar, mobile Sheet, & focus-trapped dialogs |
+| 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟢 Mastered & Verified | Zero-flash light/dark/system theme switching with semantic CSS variables |
 | 12 | **Lifecycle Debugging** | `/debug-lab` | ⚪ Not Started | Diagnosing errors through the 8 stages of the HTTP lifecycle |
 
 *Status key: ⚪ Not Started | 🟡 In Progress / Explained | 🟢 Mastered & Verified*
@@ -62,11 +62,11 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ---
 
 ### Module 4: Design Systems, Accessible Shells & Theme Switching
-- [ ] **Concept Explained**: How `mode-watcher` prevents flash of incorrect theme (FOUC) on initial page load
-- [ ] **Concept Explained**: Composing accessible layouts with semantic HTML and responsive sheet drawers
-- [ ] **Concept Explained**: Accessible modal confirmation dialogs (focus management and ESC dismissal)
-- [ ] **Code Walkthrough**: `+layout.svelte`, `theme-toggle.svelte`, `app-header.svelte`, `app-sidebar.svelte`
-- [ ] **Self-Check Question 4**: *Why should role indicators or account status badges not rely on color alone?*
+- [x] **Concept Explained**: How `mode-watcher` prevents flash of incorrect theme (FOUC) on initial page load
+- [x] **Concept Explained**: Composing accessible layouts with semantic HTML and responsive sheet drawers
+- [x] **Concept Explained**: Accessible modal confirmation dialogs (focus management and ESC dismissal)
+- [x] **Code Walkthrough**: `+layout.svelte`, `theme-toggle.svelte`, `app-header.svelte`, `app-sidebar.svelte`, `confirm-action-dialog.svelte`
+- [x] **Self-Check Question 4**: *Why should role indicators or account status badges not rely on color alone?*
 
 ---
 
@@ -133,3 +133,8 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Cookie Security Flags*: `HttpOnly` makes cookies completely inaccessible to JavaScript (`document.cookie`), neutralizing token theft via XSS. `SameSite=Lax` prevents CSRF attacks on cross-site requests.
   - *Request Lifecycle Interception*: SvelteKit's `handle` hook runs before any route resolves. It resolves the session, attaches `event.locals.user`, enforces RBAC route protection, and redirects unauthorized traffic before rendering starts.
   - *Root Data Cascading*: `+layout.server.js` exposes `{ user: locals.user }` to all child layouts and pages, creating a single reactive source of truth for the active session.
+- **Step 4.1 to 4.5 (Design Systems, Accessible Shells & Theme Switching - Module 4)**:
+  - *Zero-FOUC Theme Management*: `mode-watcher` executes inline script in `<head>` before body hydration to sync the `dark` class on `<html>` with localStorage or OS preference (`prefers-color-scheme`).
+  - *Dynamic Layout Shell Branching*: `src/routes/+layout.svelte` dynamically switches between a full authenticated desktop sidebar shell (for `/dashboard`, `/profile`, `/users`, `/admin`, `/debug-lab`) and a minimal public shell for unauthenticated/landing flows.
+  - *Accessible Dialog Focus Trapping*: `confirm-action-dialog.svelte` leverages bits-ui WAI-ARIA under the hood, trapping tab focus inside modal dialogs and listening for ESC keys to prevent keyboard traps.
+  - *Visual Role Indicator Accessibility*: Roles and statuses are never conveyed through color alone; textual badges (`user.role`, `user.status`) and screen-reader hints (`sr-only`) ensure complete assistive tech compatibility.

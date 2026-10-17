@@ -1,6 +1,6 @@
 <script>
 	import { Dialog as DialogPrimitive } from "bits-ui";
-	import X from "lucide-svelte/icons/x";
+	import X from "@lucide/svelte/icons/x";
 	import DialogOverlay from "./dialog-overlay.svelte";
 	import { cn } from "$lib/utils.js";
 
