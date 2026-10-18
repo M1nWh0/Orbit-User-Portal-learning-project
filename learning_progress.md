@@ -12,7 +12,7 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 |---|---|---|:---:|---|
 | 1 | **Application Architecture** | `hooks.server.js`, `$lib/server/` | 🟢 Mastered & Verified | Clear separation of server boundary, session resolution, route guards, & store invariants |
 | 2 | **Server-Driven Rendering** | `+page.server.js` (`load`) | ⚪ Not Started | Data fetched securely on server before HTML reaches client |
-| 3 | **Form Processing** | `+page.server.js` (`actions`) | ⚪ Not Started | Native HTTP forms with validation, `fail()`, & `use:enhance` |
+| 3 | **Form Processing** | `+page.server.js` (`actions`) | 🟢 Mastered & Verified | Native HTTP forms with validation, fail(400/403), use:enhance, & 303 redirects |
 | 4 | **Authentication** | `src/lib/server/auth.js` | 🟢 Mastered & Verified | HttpOnly, SameSite=Lax cookie sessions with instant revocation on deactivation |
 | 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | 🟢 Mastered & Verified | Server-enforced route protection in handle() hook and requireUser/requireAdmin helpers |
 | 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections (toSafeUser) preventing password hashes and salts from reaching client |
@@ -71,12 +71,12 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ---
 
 ### Module 5: Form Actions, Validation & Authentication Flows
-- [ ] **Concept Explained**: SvelteKit Form Actions: How native HTML forms submit to the server without custom fetch code
-- [ ] **Concept Explained**: Progressive enhancement with `use:enhance`: How it enhances UX without breaking no-JS environments
-- [ ] **Concept Explained**: Returning `fail(400, { ... })` to preserve form inputs while returning inline validation errors
-- [ ] **Concept Explained**: Why public registration must strictly force `role: 'user'` and ignore any submitted `role` field
-- [ ] **Code Walkthrough**: `/login`, `/register`, and `/logout` action implementations
-- [ ] **Self-Check Question 5**: *Why must server-side validation always be performed, even if client-side validation is already validating user input?*
+- [x] **Concept Explained**: SvelteKit Form Actions: How native HTML forms submit to the server without custom fetch code
+- [x] **Concept Explained**: Progressive enhancement with `use:enhance`: How it enhances UX without breaking no-JS environments
+- [x] **Concept Explained**: Returning `fail(400, { ... })` to preserve form inputs while returning inline validation errors
+- [x] **Concept Explained**: Why public registration must strictly force `role: 'user'` and ignore any submitted `role` field
+- [x] **Code Walkthrough**: `/login`, `/register`, and `/logout` action implementations
+- [x] **Self-Check Question 5**: *Why must server-side validation always be performed, even if client-side validation is already validating user input?*
 
 ---
 
@@ -138,3 +138,9 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Dynamic Layout Shell Branching*: `src/routes/+layout.svelte` dynamically switches between a full authenticated desktop sidebar shell (for `/dashboard`, `/profile`, `/users`, `/admin`, `/debug-lab`) and a minimal public shell for unauthenticated/landing flows.
   - *Accessible Dialog Focus Trapping*: `confirm-action-dialog.svelte` leverages bits-ui WAI-ARIA under the hood, trapping tab focus inside modal dialogs and listening for ESC keys to prevent keyboard traps.
   - *Visual Role Indicator Accessibility*: Roles and statuses are never conveyed through color alone; textual badges (`user.role`, `user.status`) and screen-reader hints (`sr-only`) ensure complete assistive tech compatibility.
+- **Step 5.1 to 5.5 (Public Routes & Authentication Flows - Module 5)**:
+  - *Native Form Actions*: Forms submit to server `actions` via HTTP POST, handling standard `FormData` without manual fetch boilerplate.
+  - *Preserving User Input on Failures*: `return fail(400, { message, email })` returns validation errors while preserving non-sensitive form input, avoiding frustrating full form resets.
+  - *Progressive Enhancement with `use:enhance`*: Intercepts submissions client-side for smooth UX, spinners, and reactive state updates, while falling back gracefully to standard full-page POST in no-JS environments.
+  - *Privilege Escalation Prevention*: Public registration strictly hardcodes `role: 'user'` on the server, completely ignoring any malicious `role` parameters sent in form payloads.
+  - *POST-Only Session Destruction*: `/logout` accepts only HTTP POST, preventing search engine crawlers and browser prefetch algorithms from accidentally logging out users.

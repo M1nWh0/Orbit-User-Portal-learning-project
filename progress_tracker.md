@@ -12,12 +12,12 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 | **Phase 2** | Server-Only Data Store & Security Primitives | 6 | 6 | ✅ Completed |
 | **Phase 3** | Authentication, Session Management & Server Hooks | 5 | 5 | ✅ Completed |
 | **Phase 4** | Shared Application Shell, Layout & Theme System | 5 | 5 | ✅ Completed |
-| **Phase 5** | Public Routes & Authentication Pages | 5 | 0 | ⏳ Pending Approval |
+| **Phase 5** | Public Routes & Authentication Pages | 5 | 5 | ✅ Completed |
 | **Phase 6** | User Portal Core Features | 5 | 0 | ⏳ Pending Approval |
 | **Phase 7** | Administrative Console & User Management | 5 | 0 | ⏳ Pending Approval |
 | **Phase 8** | Controlled Debugging Laboratory (`/debug-lab`) | 5 | 0 | ⏳ Pending Approval |
 | **Phase 9** | End-to-End Verification, Security Auditing & Polish | 6 | 0 | ⏳ Pending Approval |
-| **Total** | | **49** | **23** | **47% Completed** |
+| **Total** | | **49** | **28** | **57% Completed** |
 
 ---
 
@@ -111,22 +111,22 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 ---
 
 ### Phase 5: Public Routes & Authentication Pages
-- [ ] **5.1** Implement Landing Page (`src/routes/+page.svelte`):
-  - [ ] Hero banner, feature highlights, responsive layout
-  - [ ] Dynamic CTAs based on authentication state
-  - [ ] Demonstration account quick-reference helper
-- [ ] **5.2** Implement Login Page (`src/routes/login/+page.svelte` & `+page.server.js`):
-  - [ ] Form action with email/password validation
-  - [ ] Inactive account rejection feedback
-  - [ ] Session creation and redirect to `/dashboard`
-  - [ ] Demo credentials quick-fill buttons
-- [ ] **5.3** Implement Registration Page (`src/routes/register/+page.svelte` & `+page.server.js`):
-  - [ ] Form action with full field validation
-  - [ ] Strict assignment of `user` role (ignore client role input)
-  - [ ] Automatic login and redirect to `/dashboard` upon registration
-- [ ] **5.4** Implement Logout endpoint (`src/routes/logout/+server.js`):
-  - [ ] Accepts POST, destroys session, clears cookie, redirects to `/login`
-- [ ] **5.5** Test validation states, failed login messages, and successful redirects
+- [x] **5.1** Implement Landing Page (`src/routes/+page.svelte`):
+  - [x] Hero banner, feature highlights, responsive layout
+  - [x] Dynamic CTAs based on authentication state
+  - [x] Demonstration account quick-reference helper
+- [x] **5.2** Implement Login Page (`src/routes/login/+page.svelte` & `+page.server.js`):
+  - [x] Form action with email/password validation
+  - [x] Inactive account rejection feedback
+  - [x] Session creation and redirect to `/dashboard`
+  - [x] Demo credentials quick-fill buttons
+- [x] **5.3** Implement Registration Page (`src/routes/register/+page.svelte` & `+page.server.js`):
+  - [x] Form action with full field validation
+  - [x] Strict assignment of `user` role (ignore client role input)
+  - [x] Automatic login and redirect to `/dashboard` upon registration
+- [x] **5.4** Implement Logout endpoint (`src/routes/logout/+server.js`):
+  - [x] Accepts POST, destroys session, clears cookie, redirects to `/login`
+- [x] **5.5** Test validation states, failed login messages, and successful redirects
 
 ---
 
