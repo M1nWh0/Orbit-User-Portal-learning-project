@@ -108,6 +108,14 @@ export function getAllSafeUsers() {
 }
 
 /**
+ * Returns all users projected to public directory representations (omits sensitive email).
+ * @returns {Array<Omit<SafeUser, 'email'>>}
+ */
+export function getPublicDirectoryUsers() {
+	return getUsers().map(toPublicDirectoryUser);
+}
+
+/**
  * Finds an internal user record by unique ID.
  * @param {string} id
  * @returns {InternalUser | null}

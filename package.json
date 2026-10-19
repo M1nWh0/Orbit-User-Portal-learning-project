@@ -8,7 +8,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"prepare": "svelte-kit sync || echo ''",
-		"test": "node tests/store.test.js && node tests/auth.test.js && node --import ./tests/register-loader.js tests/routes.test.js"
+		"test": "node tests/store.test.js && node tests/auth.test.js && node --import ./tests/register-loader.js tests/routes.test.js && node --import ./tests/register-loader.js tests/portal.test.js"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^8.0.0",

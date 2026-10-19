@@ -13,11 +13,11 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 | **Phase 3** | Authentication, Session Management & Server Hooks | 5 | 5 | ✅ Completed |
 | **Phase 4** | Shared Application Shell, Layout & Theme System | 5 | 5 | ✅ Completed |
 | **Phase 5** | Public Routes & Authentication Pages | 5 | 5 | ✅ Completed |
-| **Phase 6** | User Portal Core Features | 5 | 0 | ⏳ Pending Approval |
+| **Phase 6** | User Portal Core Features | 5 | 5 | ✅ Completed |
 | **Phase 7** | Administrative Console & User Management | 5 | 0 | ⏳ Pending Approval |
 | **Phase 8** | Controlled Debugging Laboratory (`/debug-lab`) | 5 | 0 | ⏳ Pending Approval |
 | **Phase 9** | End-to-End Verification, Security Auditing & Polish | 6 | 0 | ⏳ Pending Approval |
-| **Total** | | **49** | **28** | **57% Completed** |
+| **Total** | | **49** | **33** | **67% Completed** |
 
 ---
 
@@ -131,23 +131,23 @@ This document tracks the end-to-end execution progress of **Orbit User Portal** 
 ---
 
 ### Phase 6: User Portal Core Features
-- [ ] **6.1** Implement User Dashboard (`src/routes/dashboard/+page.svelte` & `+page.server.js`):
-  - [ ] Regular user personalized welcome & account overview
-  - [ ] Administrator live metric summaries derived from store
-- [ ] **6.2** Implement Profile Page (`src/routes/profile/+page.svelte` & `+page.server.js`):
-  - [ ] Form action for display name and bio update
-  - [ ] Server validation and authorization guard
-  - [ ] Data invalidation with `invalidate('app:users')`
-- [ ] **6.3** Implement User Directory (`src/routes/users/+page.svelte` & `+page.server.js`):
-  - [ ] Server load with `depends('app:users')`
-  - [ ] Interactive search by display name using Svelte 5 runes
-  - [ ] Role and status badges with profile navigation links
-  - [ ] Empty state for unmatched search
-- [ ] **6.4** Implement Dynamic Profile Page (`src/routes/users/[id]/+page.svelte` & `+page.server.js`):
-  - [ ] Server load reading `params.id`
-  - [ ] 404 error handling for nonexistent user IDs
-  - [ ] Display safe user details and breadcrumb navigation
-- [ ] **6.5** Test navigation between user profiles and data freshness
+- [x] **6.1** Implement User Dashboard (`src/routes/dashboard/+page.svelte` & `+page.server.js`):
+  - [x] Regular user personalized welcome & account overview
+  - [x] Administrator live metric summaries derived from store
+- [x] **6.2** Implement Profile Page (`src/routes/profile/+page.svelte` & `+page.server.js`):
+  - [x] Form action for display name and bio update
+  - [x] Server validation and authorization guard
+  - [x] Data invalidation with `invalidate('app:users')`
+- [x] **6.3** Implement User Directory (`src/routes/users/+page.svelte` & `+page.server.js`):
+  - [x] Server load with `depends('app:users')`
+  - [x] Interactive search by display name using Svelte 5 runes
+  - [x] Role and status badges with profile navigation links
+  - [x] Empty state for unmatched search
+- [x] **6.4** Implement Dynamic Profile Page (`src/routes/users/[id]/+page.svelte` & `+page.server.js`):
+  - [x] Server load reading `params.id`
+  - [x] 404 error handling for nonexistent user IDs
+  - [x] Display safe user details and breadcrumb navigation
+- [x] **6.5** Test navigation between user profiles and data freshness
 
 ---
 

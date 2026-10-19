@@ -11,14 +11,14 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 | # | Competency Area | Primary File / Feature | Mastery Status | Key Takeaway Understood |
 |---|---|---|:---:|---|
 | 1 | **Application Architecture** | `hooks.server.js`, `$lib/server/` | 🟢 Mastered & Verified | Clear separation of server boundary, session resolution, route guards, & store invariants |
-| 2 | **Server-Driven Rendering** | `+page.server.js` (`load`) | ⚪ Not Started | Data fetched securely on server before HTML reaches client |
+| 2 | **Server-Driven Rendering** | `+page.server.js` (`load`) | 🟢 Mastered & Verified | Data fetched securely on server before HTML reaches client, passing typed data via $props() |
 | 3 | **Form Processing** | `+page.server.js` (`actions`) | 🟢 Mastered & Verified | Native HTTP forms with validation, fail(400/403), use:enhance, & 303 redirects |
 | 4 | **Authentication** | `src/lib/server/auth.js` | 🟢 Mastered & Verified | HttpOnly, SameSite=Lax cookie sessions with instant revocation on deactivation |
 | 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | 🟢 Mastered & Verified | Server-enforced route protection in handle() hook and requireUser/requireAdmin helpers |
 | 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections (toSafeUser) preventing password hashes and salts from reaching client |
 | 7 | **CRUD Operations** | Admin console & profile edit | 🟡 In Progress | In-memory CRUD methods and invariant guards implemented in store |
 | 8 | **HTTP Communication** | `+server.js` endpoints | ⚪ Not Started | HTTP methods, JSON payloads, headers, & proper status codes |
-| 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | ⚪ Not Started | Triggering targeted client reloads when server data changes |
+| 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | 🟢 Mastered & Verified | Triggering targeted client reloads via depends('app:users') and invalidate('app:users') |
 | 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟢 Mastered & Verified | Composed accessible shell with responsive desktop sidebar, mobile Sheet, & focus-trapped dialogs |
 | 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟢 Mastered & Verified | Zero-flash light/dark/system theme switching with semantic CSS variables |
 | 12 | **Lifecycle Debugging** | `/debug-lab` | ⚪ Not Started | Diagnosing errors through the 8 stages of the HTTP lifecycle |
@@ -81,11 +81,11 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ---
 
 ### Module 6: Server-Driven Data Loading, Dynamic Routes & Invalidation
-- [ ] **Concept Explained**: SvelteKit `load` functions in `+page.server.js` and passing data to `+page.svelte` via `$props()`
-- [ ] **Concept Explained**: Dynamic route matching with `[id]` and returning proper HTTP 404s via `error(404, ...)`
-- [ ] **Concept Explained**: Data freshness: How `depends('app:users')` and `invalidate('app:users')` prevent stale UI states
-- [ ] **Code Walkthrough**: `/dashboard`, `/profile`, `/users`, and `/users/[id]`
-- [ ] **Self-Check Question 6**: *What is the difference between mutating data on the server and invalidating data on the client?*
+- [x] **Concept Explained**: SvelteKit `load` functions in `+page.server.js` and passing data to `+page.svelte` via `$props()`
+- [x] **Concept Explained**: Dynamic route matching with `[id]` and returning proper HTTP 404s via `error(404, ...)`
+- [x] **Concept Explained**: Data freshness: How `depends('app:users')` and `invalidate('app:users')` prevent stale UI states
+- [x] **Code Walkthrough**: `/dashboard`, `/profile`, `/users`, and `/users/[id]`
+- [x] **Self-Check Question 6**: *What is the difference between mutating data on the server and invalidating data on the client?*
 
 ---
 
@@ -144,3 +144,9 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Progressive Enhancement with `use:enhance`*: Intercepts submissions client-side for smooth UX, spinners, and reactive state updates, while falling back gracefully to standard full-page POST in no-JS environments.
   - *Privilege Escalation Prevention*: Public registration strictly hardcodes `role: 'user'` on the server, completely ignoring any malicious `role` parameters sent in form payloads.
   - *POST-Only Session Destruction*: `/logout` accepts only HTTP POST, preventing search engine crawlers and browser prefetch algorithms from accidentally logging out users.
+- **Step 6.1 to 6.5 (Server-Driven Data Loading, Dynamic Routes & Invalidation - Module 6)**:
+  - *Server-Side Load Functions*: `+page.server.js` executes exclusively on the server, querying the data store, enforcing auth guards with `requireUser(locals)`, and passing safe serializable data via `return { ... }`.
+  - *Receiving Data with Svelte 5*: Components use `let { data } = $props()` and reactive `$derived` bindings to consume server payloads without manual client state stores.
+  - *Dynamic Route Routing (`[id]`)*: Folder names with square brackets capture URL segments into `params.id`. Missing records throw `error(404, 'User not found')`, triggering SvelteKit's standard error page boundary.
+  - *Privacy-Aware Projections*: In `users/[id]`, email addresses are private; the server only passes `email` if the visitor is an administrator or the profile owner (`canViewEmail = isOwnProfile || currentUser.role === 'admin'`).
+  - *Data Invalidation Contracts*: Declaring `depends('app:users')` in load functions tells SvelteKit to re-execute those loaders whenever the client calls `invalidate('app:users')` (e.g. after editing profile or changing roles), maintaining real-time freshness without manual page refreshes.
