@@ -16,8 +16,8 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 | 4 | **Authentication** | `src/lib/server/auth.js` | 🟢 Mastered & Verified | HttpOnly, SameSite=Lax cookie sessions with instant revocation on deactivation |
 | 5 | **Authorization & RBAC** | `hooks.server.js`, auth guards | 🟢 Mastered & Verified | Server-enforced route protection in handle() hook and requireUser/requireAdmin helpers |
 | 6 | **Data Modeling & Sanitization** | `src/lib/server/store.js` | 🟢 Mastered & Verified | Safe projections (toSafeUser) preventing password hashes and salts from reaching client |
-| 7 | **CRUD Operations** | Admin console & profile edit | 🟡 In Progress | In-memory CRUD methods and invariant guards implemented in store |
-| 8 | **HTTP Communication** | `+server.js` endpoints | ⚪ Not Started | HTTP methods, JSON payloads, headers, & proper status codes |
+| 7 | **CRUD Operations** | Admin console & profile edit | 🟢 Mastered & Verified | Full CRUD implemented: create user modal, read table, update profile & roles, toggle status, and last admin guard |
+| 8 | **HTTP Communication** | `+server.js` endpoints | 🟢 Mastered & Verified | RESTful JSON API endpoints (+server.js) with 200, 400, 401, 403, 404 status codes and body parsing |
 | 9 | **Data Freshness & Invalidation** | `depends()` & `invalidate()` | 🟢 Mastered & Verified | Triggering targeted client reloads via depends('app:users') and invalidate('app:users') |
 | 10 | **UI Architecture & Components** | Svelte 5 Runes + shadcn-svelte | 🟢 Mastered & Verified | Composed accessible shell with responsive desktop sidebar, mobile Sheet, & focus-trapped dialogs |
 | 11 | **Styling Systems & Dark Mode** | Tailwind CSS + mode-watcher | 🟢 Mastered & Verified | Zero-flash light/dark/system theme switching with semantic CSS variables |
@@ -90,12 +90,12 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
 ---
 
 ### Module 7: Administrative Controls, RBAC & Endpoints
-- [ ] **Concept Explained**: Form actions vs HTTP endpoints (`+server.js`): When each is appropriate
-- [ ] **Concept Explained**: Status codes in API contracts: 200, 400, 401, 403, 404, 409, 500
-- [ ] **Concept Explained**: The distinction between 401 Unauthorized (unauthenticated) and 403 Forbidden (unauthorized)
-- [ ] **Concept Explained**: Enforcing account deactivation: Why deactivation must immediately invalidate active sessions
-- [ ] **Code Walkthrough**: `/admin`, `/admin/users`, and `/api/users/[id]/status`
-- [ ] **Self-Check Question 7**: *Why is hiding an "Admin" button in the navigation bar insufficient to protect an administrative endpoint?*
+- [x] **Concept Explained**: Form actions vs HTTP endpoints (`+server.js`): When each is appropriate
+- [x] **Concept Explained**: Status codes in API contracts: 200, 400, 401, 403, 404, 409, 500
+- [x] **Concept Explained**: The distinction between 401 Unauthorized (unauthenticated) and 403 Forbidden (unauthorized)
+- [x] **Concept Explained**: Enforcing account deactivation: Why deactivation must immediately invalidate active sessions
+- [x] **Code Walkthrough**: `/admin`, `/admin/users`, and `/api/users/[id]/status`
+- [x] **Self-Check Question 7**: *Why is hiding an "Admin" button in the navigation bar insufficient to protect an administrative endpoint?*
 
 ---
 
@@ -150,3 +150,9 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Dynamic Route Routing (`[id]`)*: Folder names with square brackets capture URL segments into `params.id`. Missing records throw `error(404, 'User not found')`, triggering SvelteKit's standard error page boundary.
   - *Privacy-Aware Projections*: In `users/[id]`, email addresses are private; the server only passes `email` if the visitor is an administrator or the profile owner (`canViewEmail = isOwnProfile || currentUser.role === 'admin'`).
   - *Data Invalidation Contracts*: Declaring `depends('app:users')` in load functions tells SvelteKit to re-execute those loaders whenever the client calls `invalidate('app:users')` (e.g. after editing profile or changing roles), maintaining real-time freshness without manual page refreshes.
+- **Step 7.1 to 7.5 (Administrative Controls, RBAC & Endpoints - Module 7)**:
+  - *Form Actions vs HTTP Endpoints*: Form Actions in `+page.server.js` handle standard user interface forms with automatic progressive enhancement (`use:enhance`); HTTP endpoints in `+server.js` expose explicit RESTful JSON APIs for programmatic integrations or status toggles.
+  - *Comprehensive Status Codes in API Contracts*: Status API responds with `401 Unauthorized` (no session), `403 Forbidden` (non-admin caller), `404 Not Found` (unknown target ID), `400 Bad Request` (invalid status value or last-admin invariant violation), and `200 OK` (successful mutation with serialized safe user).
+  - *Application Invariant Enforcement*: The "last active administrator" guard is enforced in both form actions and the REST API. If an admin tries to demote or deactivate the only remaining active admin, the server strictly returns `400 Bad Request`.
+  - *Immediate Session Eviction*: Calling `setUserStatus(id, 'inactive')` immediately purges all active session tokens for that user ID, cutting off access on their very next request.
+  - *Defense-in-Depth Authorization*: UI elements (e.g., Demote button) are conditionally hidden/disabled for convenience, but the server action and HTTP endpoint independently re-verify `requireAdmin(locals)` before executing mutations.

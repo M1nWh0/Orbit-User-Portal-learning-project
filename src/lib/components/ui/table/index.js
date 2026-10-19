@@ -23,7 +23,6 @@ export {
 	Cell as TableCell,
 	Footer as TableFooter,
 	Head as TableHead,
-	TableHeader as Header,
-	TableHeader,
+	Header as TableHeader,
 	Row as TableRow
 };
