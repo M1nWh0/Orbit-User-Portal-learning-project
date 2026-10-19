@@ -10,5 +10,12 @@ export function resolve(specifier, context, nextResolve) {
 			url: pathToFileURL(filePath).href
 		};
 	}
+	if (specifier === '$app/environment') {
+		return {
+			format: 'module',
+			shortCircuit: true,
+			url: 'data:text/javascript,export const dev = process.env.NODE_ENV !== "production"; export const browser = false; export const building = false;'
+		};
+	}
 	return nextResolve(specifier, context);
 }

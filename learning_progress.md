@@ -156,3 +156,15 @@ Based on Section 15 of `learning_guide.md`, track your mastery of the 12 core co
   - *Application Invariant Enforcement*: The "last active administrator" guard is enforced in both form actions and the REST API. If an admin tries to demote or deactivate the only remaining active admin, the server strictly returns `400 Bad Request`.
   - *Immediate Session Eviction*: Calling `setUserStatus(id, 'inactive')` immediately purges all active session tokens for that user ID, cutting off access on their very next request.
   - *Defense-in-Depth Authorization*: UI elements (e.g., Demote button) are conditionally hidden/disabled for convenience, but the server action and HTTP endpoint independently re-verify `requireAdmin(locals)` before executing mutations.
+- **Step 8.1 to 8.5 (Controlled Debugging Laboratory & Request Lifecycle - Module 8)**:
+  - *8-Stage Request Lifecycle*: Mental model tracing an operation from Client Intent -> HTTP Transmission -> Route Matching -> Payload Validation -> Auth Hook / Locals -> Business Logic -> Response Serialization -> DOM Mutation / Runes State.
+  - *Contract Validation (Scenario A)*: Differentiating structural failure from syntax errors; strict schema validation against `{ email }` returning `400 Bad Request` with diagnostic telemetry when receiving `{ username }`.
+  - *Data-Level vs Route-Level 404 (Scenario B)*: Proving that a 404 returned by an endpoint with a matched dynamic route `[id]` represents a missing record in the data store, whereas an unmapped URL represents a routing infrastructure failure.
+  - *Production Error Safeguards (Scenario C)*: Ensuring debug endpoints that simulate unhandled exceptions (`500 Internal Server Error`) are strictly guarded with `if (!dev) return json(..., { status: 403 })`, preventing diagnostic information leakage in production.
+  - *Cookie Credentials Mechanics (Scenario D)*: Demonstrating browser `fetch` credential behavior where `credentials: 'omit'` strips the `orbit_session` cookie from request headers, resulting in `locals.user = null` at the server hook layer.
+- **Step 9.1 to 9.6 (Verification, Permission Matrix Audit & Architectural Boundaries - Module 9)**:
+  - *Comprehensive RBAC Matrix Verification*: Rigorous test matrix validating all 24 permission combinations across Anonymous, User, and Admin roles against all public, protected, and admin routes and endpoints.
+  - *Defense-in-Depth vs UI Convenience*: Reinforcing that hiding UI components (like Admin links, Promote/Demote buttons, or Status toggles) is merely an ergonomic convenience; the server boundary independently re-evaluates `requireAdmin(locals)` on every action and HTTP route.
+  - *Application Invariant Integrity*: Verifying that both form actions and REST API endpoints strictly preserve the "last active administrator" rule, preventing total system lockout.
+  - *Learning Prototype vs Enterprise Production Boundary*: Cataloging the essential architectural delta between our in-memory learning portal and production systems (durable databases with ACID transactions, Redis session stores with TTL/rotation, CSRF tokens, rate limiting, and structured audit telemetry).
+
